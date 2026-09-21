@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>StockFlow - Inventory Dashboard</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="container header-content">
+
+      <a href="#" class="logo" id="logo">
+        StockFlow
+      </a>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#" class="nav-link active">Dashboard</a>
+        <a href="#" class="nav-link">Inventory</a>
+        <a href="#" class="nav-link">Orders</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <main class="container dashboard">
+
+    <!-- Dashboard Heading -->
+    <section class="page-header">
+      <div>
+        <p class="eyebrow">Inventory Management</p>
+        <h1>Dashboard</h1>
+        <p class="page-description">
+          Keep track of your products, stock levels, and sales.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- Statistics -->
+    <section class="stats-grid" aria-label="Inventory statistics">
+
+      <article class="stat-card">
+        <div class="stat-card-header">
+          <span class="stat-label">Total Products</span>
+        </div>
+        <strong class="stat-value" id="total-products">128</strong>
+        <span class="stat-note">Products in inventory</span>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-card-header">
+          <span class="stat-label">Low Stock</span>
+        </div>
+        <strong class="stat-value" id="low-stock">12</strong>
+        <span class="stat-note">Need attention</span>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-card-header">
+          <span class="stat-label">Orders Today</span>
+        </div>
+        <strong class="stat-value" id="orders-today">24</strong>
+        <span class="stat-note">Orders received today</span>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-card-header">
+          <span class="stat-label">Total Revenue</span>
+        </div>
+        <strong class="stat-value" id="total-revenue">₹48,250</strong>
+        <span class="stat-note">This month's revenue</span>
+      </article>
+
+    </section>
+
+
+    <!-- Add Product -->
+    <section class="panel add-product-section">
+
+      <div class="section-header">
+        <div>
+          <h2>Add Product</h2>
+          <p>Add a new product to your inventory.</p>
+        </div>
+      </div>
+
+      <form class="product-form" id="product-form">
+
+        <div class="form-group">
+          <label for="product-name">Product Name</label>
+          <input type="text" id="product-name" name="productName" placeholder="e.g. Wireless Mouse">
+        </div>
+
+        <div class="form-group">
+          <label for="product-category">Category</label>
+          <select id="product-category" name="category">
+            <option value="">Select category</option>
+            <option value="electronics">Electronics</option>
+            <option value="clothing">Clothing</option>
+            <option value="food">Food</option>
+            <option value="accessories">Accessories</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="product-price">Price</label>
+          <input type="number" id="product-price" name="price" placeholder="e.g. 999">
+        </div>
+
+        <div class="form-group">
+          <label for="stock-quantity">Stock Quantity</label>
+          <input type="number" id="stock-quantity" name="stockQuantity" placeholder="e.g. 25">
+        </div>
+
+        <div class="form-group">
+          <label for="product-status">Product Status</label>
+          <select id="product-status" name="status">
+            <option value="">Select status</option>
+            <option value="in-stock">In Stock</option>
+            <option value="low-stock">Low Stock</option>
+            <option value="out-of-stock">Out of Stock</option>
+          </select>
+        </div>
+
+        <div class="form-group form-button-group">
+          <button type="button" class="btn btn-primary" id="add-product-button">
+            Add Product
+          </button>
+        </div>
+
+      </form>
+
+    </section>
+
+
+    <!-- Inventory -->
+    <section class="panel inventory-section">
+
+      <div class="section-header">
+        <div>
+          <h2>Inventory</h2>
+          <p>Manage and monitor your current products.</p>
+        </div>
+      </div>
+
+
+      <!-- Search and Filters -->
+      <div class="inventory-controls">
+
+        <div class="form-group search-group">
+          <label for="search-products">Search Products</label>
+          <input type="search" id="search-products" name="search" placeholder="Search by product name...">
+        </div>
+
+        <div class="form-group">
+          <label for="category-filter">Category</label>
+          <select id="category-filter" name="categoryFilter">
+            <option value="">All Categories</option>
+            <option value="electronics">Electronics</option>
+            <option value="clothing">Clothing</option>
+            <option value="food">Food</option>
+            <option value="accessories">Accessories</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="stock-status-filter">Stock Status</label>
+          <select id="stock-status-filter" name="stockStatusFilter">
+            <option value="">All Statuses</option>
+            <option value="in-stock">In Stock</option>
+            <option value="low-stock">Low Stock</option>
+            <option value="out-of-stock">Out of Stock</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="price-sort">Sort by Price</label>
+          <select id="price-sort" name="priceSort">
+            <option value="">Default</option>
+            <option value="low-high">Low to High</option>
+            <option value="high-low">High to Low</option>
+          </select>
+        </div>
+
+      </div>
+
+
+      <!-- Product Table -->
+      <div class="table-wrapper">
+
+        <table class="inventory-table" id="inventory-table">
+
+          <thead>
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Category</th>
+              <th scope="col">Price</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="inventory-table-body">
+
+            <tr class="product-row">
+              <td>
+                <div class="product-info">
+                  <strong>Wireless Mouse</strong>
+                  <span>SKU-001</span>
+                </div>
+              </td>
+
+              <td>Electronics</td>
+
+              <td>₹799</td>
+
+              <td>45</td>
+
+              <td>
+                <span class="status-badge status-in-stock">
+                  In Stock
+                </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+                  <button type="button" class="action-btn edit-btn">
+                    Edit
+                  </button>
+
+                  <button type="button" class="action-btn delete-btn">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+
+            <tr class="product-row">
+              <td>
+                <div class="product-info">
+                  <strong>USB-C Cable</strong>
+                  <span>SKU-002</span>
+                </div>
+              </td>
+
+              <td>Accessories</td>
+
+              <td>₹499</td>
+
+              <td>8</td>
+
+              <td>
+                <span class="status-badge status-low-stock">
+                  Low Stock
+                </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+                  <button type="button" class="action-btn edit-btn">
+                    Edit
+                  </button>
+
+                  <button type="button" class="action-btn delete-btn">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+
+            <tr class="product-row">
+              <td>
+                <div class="product-info">
+                  <strong>Bluetooth Speaker</strong>
+                  <span>SKU-003</span>
+                </div>
+              </td>
+
+              <td>Electronics</td>
+
+              <td>₹1,499</td>
+
+              <td>22</td>
+
+              <td>
+                <span class="status-badge status-in-stock">
+                  In Stock
+                </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+                  <button type="button" class="action-btn edit-btn">
+                    Edit
+                  </button>
+
+                  <button type="button" class="action-btn delete-btn">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+
+            <tr class="product-row">
+              <td>
+                <div class="product-info">
+                  <strong>Desk Lamp</strong>
+                  <span>SKU-004</span>
+                </div>
+              </td>
+
+              <td>Accessories</td>
+
+              <td>₹1,199</td>
+
+              <td>3</td>
+
+              <td>
+                <span class="status-badge status-low-stock">
+                  Low Stock
+                </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+                  <button type="button" class="action-btn edit-btn">
+                    Edit
+                  </button>
+
+                  <button type="button" class="action-btn delete-btn">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+
+            <tr class="product-row">
+              <td>
+                <div class="product-info">
+                  <strong>Cotton T-Shirt</strong>
+                  <span>SKU-005</span>
+                </div>
+              </td>
+
+              <td>Clothing</td>
+
+              <td>₹599</td>
+
+              <td>0</td>
+
+              <td>
+                <span class="status-badge status-out-of-stock">
+                  Out of Stock
+                </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+                  <button type="button" class="action-btn edit-btn">
+                    Edit
+                  </button>
+
+                  <button type="button" class="action-btn delete-btn">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- Low Stock -->
+    <section class="panel low-stock-section">
+
+      <div class="section-header">
+        <div>
+          <h2>Low Stock Products</h2>
+          <p>Products that may need to be restocked soon.</p>
+        </div>
+      </div>
+
+      <div class="low-stock-list">
+
+        <article class="low-stock-item">
+          <div class="low-stock-product">
+            <strong>USB-C Cable</strong>
+            <span>Accessories</span>
+          </div>
+
+          <div class="low-stock-quantity">
+            <strong>8</strong>
+            <span>units left</span>
+          </div>
+        </article>
+
+
+        <article class="low-stock-item">
+          <div class="low-stock-product">
+            <strong>Desk Lamp</strong>
+            <span>Accessories</span>
+          </div>
+
+          <div class="low-stock-quantity">
+            <strong>3</strong>
+            <span>units left</span>
+          </div>
+        </article>
+
+
+        <article class="low-stock-item">
+          <div class="low-stock-product">
+            <strong>Notebook Set</strong>
+            <span>Stationery</span>
+          </div>
+
+          <div class="low-stock-quantity">
+            <strong>5</strong>
+            <span>units left</span>
+          </div>
+        </article>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 StockFlow. Inventory Dashboard.</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
