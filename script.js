@@ -12,8 +12,8 @@ const priceSort = document.getElementById("price-sort");
 const lowStockList = document.querySelector(".low-stock-list");
 const totalProduct = document.getElementById("total-products");
 const lowStock = document.getElementById("low-stock");
-const ordersToday = document.getElementById("orders-today");
-const totalRevenue = document.getElementById("total-revenue");
+const totalStock = document.getElementById("total-stock");
+const stockValue = document.getElementById("stock-value");
 
 
 let productData = JSON.parse(localStorage.getItem("proData")) || [];
@@ -223,6 +223,17 @@ function dashboardStats(){
 
     totalProduct.textContent = productData.length ;
     lowStock.textContent =  productData.filter((data) => data.productstatus === "low-stock").length;
+
+    let totalSto = 0 ;
+    let totalStoValue = 0;
+
+    productData.forEach((data)=>{
+        totalSto += Number(data.stockquantity) ;
+        totalStoValue += Number(data.productprice * data.stockquantity);
+    })
+
+    totalStock.textContent = totalSto;
+    stockValue.textContent = "₹" + totalStoValue;
 
 }
 
