@@ -5,14 +5,24 @@ const stockQuantity = document.getElementById("stock-quantity");
 const productStatus = document.getElementById("product-status");
 const addProBtn = document.getElementById("add-product-button");
 const inventoryTable = document.getElementById("inventory-table-body");
+const searchProducts = document.getElementById("search-products");
+const categoryFilter = document.getElementById("category-filter");
+const stockStatusFilter = document.getElementById("stock-status-filter");
+const priceSort = document.getElementById("price-sort");
+const lowStockList = document.querySelector(".low-stock-list");
+const totalProduct = document.getElementById("total-products");
+const lowStock = document.getElementById("low-stock");
+const ordersToday = document.getElementById("orders-today");
+const totalRevenue = document.getElementById("total-revenue");
 
 
 let productData = JSON.parse(localStorage.getItem("proData")) || [];
 addToInventory(productData);
+lowStockAdder();
+dashboardStats();
 
 let mode = "add";
 let editingId = null;
-
 
 function addProduct() {
 
@@ -29,6 +39,8 @@ function addProduct() {
 
         localStorage.setItem("proData", JSON.stringify(productData));
         addToInventory(productData);
+        lowStockAdder();
+        dashboardStats();
 
         mode = "add";
         editingId = null;
@@ -41,13 +53,13 @@ function addProduct() {
         productStatus.value = "";
 
     }
-    else{
+    else {
 
         let skuNumber;
-    
+
         skuNumber = JSON.parse(localStorage.getItem("skuNumber")) || 1;
-    
-    
+
+
         productData.push({
             id: crypto.randomUUID(),
             sku: skuNumber,
@@ -57,15 +69,15 @@ function addProduct() {
             stockquantity: stockQuantity.value,
             productstatus: productStatus.value,
         })
-    
+
         localStorage.setItem("proData", JSON.stringify(productData));
-    
+
         productName.value = "";
         productCategory.value = "";
         productPrice.value = "";
         stockQuantity.value = "";
         productStatus.value = "";
-    
+
         skuNumber++;
         localStorage.setItem("skuNumber", JSON.stringify(skuNumber));
     }
@@ -120,6 +132,34 @@ function addToInventory(dataToAdd) {
 
 }
 
+function searchAndSort() {
+
+    const valueOfSearch = searchProducts.value;
+    const valueOfCategory = categoryFilter.value;
+    const valueOfStock = stockStatusFilter.value;
+    const valueOfPrice = priceSort.value;
+
+    const filteredArray = productData.filter((data) => data.productname.toLowerCase().includes(valueOfSearch.toLowerCase()));
+
+    const categoryArray = valueOfCategory !== "" ? filteredArray.filter((data) => data.productcategory === valueOfCategory) : filteredArray;
+
+    const stockArray = valueOfStock !== "" ? categoryArray.filter((data) => data.productstatus === valueOfStock) : categoryArray;
+
+    const copyArray = [...stockArray];
+
+    if (valueOfPrice === "low-high") {
+        copyArray.sort((a, b) => a.productprice - b.productprice);
+    }
+    else if (valueOfPrice === "high-low") {
+        copyArray.sort((a, b) => b.productprice - a.productprice);
+    }
+    else {
+        addToInventory(copyArray);
+    }
+
+    addToInventory(copyArray);
+}
+
 function deleteProduct(deleteBtn) {
 
     const parentEle = deleteBtn.closest("tr");
@@ -131,6 +171,8 @@ function deleteProduct(deleteBtn) {
     localStorage.setItem("proData", JSON.stringify(productData));
 
     addToInventory(productData);
+    lowStockAdder();
+    dashboardStats();
 }
 
 function editProduct(editBtn) {
@@ -151,13 +193,44 @@ function editProduct(editBtn) {
     editingId = idOfParent;
     addProBtn.textContent = "Update Product";
 
-
 }
 
+function lowStockAdder() {
+
+    lowStockList.innerHTML = "";
+
+    const lowStockPro = productData.filter((data) => data.productstatus === "low-stock");
+
+    lowStockPro.forEach((data) => {
+
+        lowStockList.innerHTML += `
+         <article class="low-stock-item">
+          <div class="low-stock-product">
+            <strong>${data.productname}</strong>
+            <span>${data.productcategory}</span>
+          </div>
+
+          <div class="low-stock-quantity">
+            <strong>${data.stockquantity}</strong>
+            <span>units left</span>
+          </div>
+        </article>
+        `
+    })
+}
+
+function dashboardStats(){
+
+    totalProduct.textContent = productData.length ;
+    lowStock.textContent =  productData.filter((data) => data.productstatus === "low-stock").length;
+
+}
 
 addProBtn.addEventListener("click", () => {
     addProduct();
     addToInventory(productData);
+    lowStockAdder();
+    dashboardStats()
 })
 
 inventoryTable.addEventListener("click", (event) => {
@@ -171,3 +244,10 @@ inventoryTable.addEventListener("click", (event) => {
         editProduct(event.target);
     }
 })
+
+searchProducts.addEventListener("input", searchAndSort);
+categoryFilter.addEventListener("change", searchAndSort);
+stockStatusFilter.addEventListener("change", searchAndSort);
+priceSort.addEventListener("change", searchAndSort);
+
+

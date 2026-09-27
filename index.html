@@ -20,8 +20,9 @@
       </a>
 
       <nav class="main-nav" aria-label="Main navigation">
-        <a href="#" class="nav-link active">Dashboard</a>
-        <a href="#" class="nav-link">Inventory</a>
+        <a href="#dashboard" class="nav-link active">Dashboard</a>
+        <a href="#inventory" class="nav-link">Inventory</a>
+        <a href="#lowstock" class="nav-link">Low Stock</a>
         <a href="#" class="nav-link">Orders</a>
       </nav>
 
@@ -29,7 +30,7 @@
   </header>
 
 
-  <main class="container dashboard">
+  <main class="container dashboard" id="dashboard">
 
     <!-- Dashboard Heading -->
     <section class="page-header">
@@ -44,13 +45,13 @@
 
 
     <!-- Statistics -->
-    <section class="stats-grid" aria-label="Inventory statistics">
+    <section class="stats-grid" aria-label="Inventory statistics" >
 
       <article class="stat-card">
         <div class="stat-card-header">
           <span class="stat-label">Total Products</span>
         </div>
-        <strong class="stat-value" id="total-products">128</strong>
+        <strong class="stat-value" id="total-products"></strong>
         <span class="stat-note">Products in inventory</span>
       </article>
 
@@ -58,7 +59,7 @@
         <div class="stat-card-header">
           <span class="stat-label">Low Stock</span>
         </div>
-        <strong class="stat-value" id="low-stock">12</strong>
+        <strong class="stat-value" id="low-stock"></strong>
         <span class="stat-note">Need attention</span>
       </article>
 
@@ -141,7 +142,7 @@
 
 
     <!-- Inventory -->
-    <section class="panel inventory-section">
+    <section class="panel inventory-section" id="inventory">
 
       <div class="section-header">
         <div>
@@ -222,7 +223,7 @@
     <!-- Low Stock -->
     <section class="panel low-stock-section">
 
-      <div class="section-header">
+      <div class="section-header" id="lowstock">
         <div>
           <h2>Low Stock Products</h2>
           <p>Products that may need to be restocked soon.</p>
